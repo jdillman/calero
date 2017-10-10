@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Route, Link } from 'react-router-dom';
 import { appStart } from 'modules/UIModule';
 
-import Urls from 'lib/urls';
 import ItemScreen from 'components/screens/ItemScreen';
 import Selector from 'components/Selector';
 
@@ -14,12 +13,13 @@ import 'css/App.css';
 
 function HomeScreen() {
   return (
-  <Selector>
-    <li id="test">test</li>
-    <li id="foo">foo</li>
-    <li id="bar">bar</li>
-    <li id="baz">baz</li>
-  </Selector>);
+    <Selector>
+      <li id="test">test</li>
+      <li id="foo">foo</li>
+      <li id="bar">bar</li>
+      <li id="baz">baz</li>
+    </Selector>
+  );
 }
 
 class App extends React.Component {

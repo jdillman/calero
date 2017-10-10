@@ -20,10 +20,10 @@ class Selector extends React.Component {
   }
 
   // toggle selected state
-  itemClick = (id) => (event) => {
+  itemClick = id => () => {
     let selected = this.state.selected;
     const found = selected.indexOf(id);
-    
+
     if (found === -1) {
       selected = selected.concat([id]);
     } else {
@@ -44,20 +44,20 @@ class Selector extends React.Component {
 
   keyDown = (e) => {
     switch (e.key) {
-    case 'Shift':
-      // Todo select all to this one
-      break;
-    case 'Escape':
-      this.clearSelected();
-      break;
-    case 'Control':
-      this.setState({ forceShow: true });
-      document.addEventListener('keyup', this.ctrlRelease);
-      break;
-    default:
+      case 'Shift':
+        // Todo select all to this one
+        break;
+      case 'Escape':
+        this.clearSelected();
+        break;
+      case 'Control':
+        this.setState({ forceShow: true });
+        document.addEventListener('keyup', this.ctrlRelease);
+        break;
+      default:
     }
   }
-  
+
   // Built an array of LIs of all the children passed in
   renderSelectorItems(items) {
     return items.reduce((list, item) => {
@@ -67,16 +67,18 @@ class Selector extends React.Component {
         return list;
       }
 
-      const itemClass = 'selector-item';
+      const itemProps = {
+        key: id,
+        onClick: this.itemClick(id),
+        className: 'selector-item',
+      };
 
-      list.push(
-        <li
-          className="selector-item"
-          onClick={this.itemClick(id)}
-          key={id}
-        >{item.props.children}</li>
-      );
+      if (this.state.selected.indexOf(id) !== -1) {
+        itemProps.style = { fontWeight: 'bold', color: 'darkblue' }; // temp debug
+        itemProps.className += ' selected';
+      }
 
+      list.push(<li {...itemProps}>{item.props.children}</li>);
       return list;
     }, []);
   }

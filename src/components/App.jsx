@@ -5,6 +5,7 @@ import { appStart } from 'modules/UIModule';
 
 import Urls from 'lib/urls';
 import ItemScreen from 'components/screens/ItemScreen';
+import Selector from 'components/Selector';
 
 import 'css/common/reset.css';
 import 'css/common/colors.css';
@@ -12,12 +13,18 @@ import 'css/common/base.css';
 import 'css/App.css';
 
 function HomeScreen() {
-  return <a href={Urls.GITHUB}>Reactor Bootstrap</a>;
+  return (
+  <Selector>
+    <li id="test">test</li>
+    <li id="foo">foo</li>
+    <li id="bar">bar</li>
+    <li id="baz">baz</li>
+  </Selector>);
 }
 
 class App extends React.Component {
   componentDidMount() {
-    this.props.appStart();
+    // this.props.appStart();
   }
 
   render() {

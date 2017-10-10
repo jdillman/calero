@@ -14,10 +14,10 @@ import 'css/App.css';
 function HomeScreen() {
   return (
     <Selector>
-      <li id="test">test</li>
-      <li id="foo">foo</li>
-      <li id="bar">bar</li>
-      <li id="baz">baz</li>
+      <span id="test">test</span>
+      <span id="foo">foo</span>
+      <span id="bar">bar</span>
+      <span id="baz">baz</span>
     </Selector>
   );
 }

@@ -1,0 +1,16 @@
+body {
+  --primary: #666;
+  --accent: #628AE7;
+  --background: #f5f5f5;
+  --text: #333;
+}
+
+body.dark-theme {
+  --primary: #333;
+  --accent: #628AE7;
+  --background: #222;
+  --text: #ddd;
+}
+
+/* 1240AB  214494  0B318A  628AE7  9CB3E7
+   FFAA00  DC9D1E  CF8A00  FFC85B  FFE0A3 */

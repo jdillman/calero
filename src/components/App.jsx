@@ -12,13 +12,20 @@ import 'css/common/base.css';
 import 'css/App.css';
 
 function HomeScreen() {
+  const ActionBox = selectedItems => (
+    <div>{selectedItems.count} selected</div>
+  );
+
   return (
-    <Selector>
-      <span id="test">test</span>
-      <span id="foo">foo</span>
-      <span id="bar">bar</span>
-      <span id="baz">baz</span>
-    </Selector>
+    <div>
+      <p>Select Ctrl or Shift while clicking on the yellow boxes</p>
+      <Selector activeClass="selected" actionBox={ActionBox}>
+        <div className="box" id="test" />
+        <div className="box" id="test2" />
+        <div className="box" id="test3" />
+        <div className="box" id="test4" />
+      </Selector>
+    </div>
   );
 }
 

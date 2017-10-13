@@ -6,8 +6,7 @@ class Selector extends React.Component {
 
     this.state = {
       forceShow: false,
-      show: false,
-      selected: [],
+      selected: props.selected || [],
     };
   }
 
@@ -19,13 +18,34 @@ class Selector extends React.Component {
     document.removeEventListener('keydown', this.keyDown);
   }
 
+  gatherSelectedItems(event, id) {
+    const ids = [];
+    // multiselect with shift
+    if (event.shiftKey) {
+      const children = this.props.children;
+      // eslint-disable-next-line
+      for (let x = 0; x <= children.length; x++) {
+        if (children[x].props.id === id) {
+          break;
+        }
+        ids.push(children[x].props.id);
+      }
+    }
+    ids.push(id);
+    return ids;
+  }
+
   // toggle selected state
-  itemClick = id => () => {
+  itemClick = id => (event) => {
+    event.preventDefault();
+    if (!(event.ctrlKey || event.shiftKey)) {
+      return;
+    }
+
     let selected = this.state.selected;
     const found = selected.indexOf(id);
-
     if (found === -1) {
-      selected = selected.concat([id]);
+      selected = selected.concat(this.gatherSelectedItems(event, id));
     } else {
       selected.splice(found, 1);
     }
@@ -74,13 +94,25 @@ class Selector extends React.Component {
       };
 
       if (this.state.selected.indexOf(id) !== -1) {
-        itemProps.style = { fontWeight: 'bold', color: 'darkblue' }; // temp debug
-        itemProps.className += ' selected';
+        if (this.props.style) {
+          itemProps.style = this.props.style;
+        }
+        if (this.props.activeClass) {
+          itemProps.className += ` ${this.props.activeClass}`;
+        }
       }
 
-      list.push(<li {...itemProps}>{item.props.children}</li>);
+      list.push(<li {...itemProps}>{item}</li>);
       return list;
     }, []);
+  }
+
+  renderSelectedCount() {
+    return (<div className="wrapper">
+      <p className="selected-count">
+        <span>{ this.state.selected.length } items selected</span>
+      </p>
+    </div>);
   }
 
   render() {
@@ -89,14 +121,14 @@ class Selector extends React.Component {
       return null;
     }
 
+    const selectedCount = (itemList.count > 0 || this.state.forceShow)
+      ? this.renderSelectedCount(this.state.selected)
+      : null;
+
     return (
       <div className="selector">
         <ul>{ itemList }</ul>
-        <div className="wrapper">
-          <p className="selected-count">
-            <span>{ this.state.selected.length } items selected</span>
-          </p>
-        </div>
+        { selectedCount }
       </div>
     );
   }

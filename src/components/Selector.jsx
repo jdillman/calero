@@ -5,7 +5,7 @@ class Selector extends React.Component {
     super(props);
 
     this.state = {
-      forceShow: false,
+      showActionBox: false,
       selected: props.selected || [],
     };
   }
@@ -18,34 +18,34 @@ class Selector extends React.Component {
     document.removeEventListener('keydown', this.keyDown);
   }
 
-  gatherSelectedItems(event, id) {
-    const ids = [];
-    // multiselect with shift
-    if (event.shiftKey) {
-      const children = this.props.children;
-      // eslint-disable-next-line
-      for (let x = 0; x <= children.length; x++) {
-        if (children[x].props.id === id) {
-          break;
-        }
-        ids.push(children[x].props.id);
+  // group select
+  shiftClick(key) {
+    const keys = [];
+    const children = this.props.children;
+    const found = children.findIndex(child => child.key === key);
+    // eslint-disable-next-line
+    for (let x = found; x >= 0; x--) {
+      if (this.state.selected.indexOf(children[x].key) !== -1) {
+        break;
       }
+      keys.push(children[x].key);
     }
-    ids.push(id);
-    return ids;
+
+    return keys;
   }
 
-  // toggle selected state
-  itemClick = id => (event) => {
-    event.preventDefault();
-    if (!(event.ctrlKey || event.shiftKey)) {
+  itemClick = key => (event) => {
+    if (!(event.ctrlKey || event.metaKey || event.shiftKey)) {
       return;
     }
-
+    event.preventDefault();
     let selected = this.state.selected;
-    const found = selected.indexOf(id);
+    const found = selected.indexOf(key);
     if (found === -1) {
-      selected = selected.concat(this.gatherSelectedItems(event, id));
+      const ids = event.shiftKey
+        ? this.shiftClick(key)
+        : key;
+      selected = selected.concat(ids);
     } else {
       selected.splice(found, 1);
     }
@@ -59,19 +59,16 @@ class Selector extends React.Component {
 
   ctrlRelease = () => {
     document.removeEventListener('keyup', this.ctrlRelease);
-    this.setState({ forceShow: false });
+    this.setState({ showActionBox: false });
   }
 
   keyDown = (e) => {
     switch (e.key) {
-      case 'Shift':
-        // Todo select all to this one
-        break;
       case 'Escape':
         this.clearSelected();
         break;
       case 'Control':
-        this.setState({ forceShow: true });
+        this.setState({ showActionBox: true });
         document.addEventListener('keyup', this.ctrlRelease);
         break;
       default:
@@ -81,19 +78,19 @@ class Selector extends React.Component {
   // Built an array of LIs of all the children passed in
   renderSelectorItems(items) {
     return items.reduce((list, item) => {
-      const id = item.props.id;
-      if (!id) {
-        console.log('Missing Id on child of <Selector>, skipping');
+      const key = item.key;
+      if (!key) {
+        console.log('Missing key on child of <Selector>, skipping');
         return list;
       }
 
       const itemProps = {
-        key: id,
-        onClick: this.itemClick(id),
+        key,
+        onClick: this.itemClick(key),
         className: 'selector-item',
       };
 
-      if (this.state.selected.indexOf(id) !== -1) {
+      if (this.state.selected.indexOf(key) !== -1) {
         if (this.props.style) {
           itemProps.style = this.props.style;
         }
@@ -107,12 +104,8 @@ class Selector extends React.Component {
     }, []);
   }
 
-  renderSelectedCount() {
-    return (<div className="wrapper">
-      <p className="selected-count">
-        <span>{ this.state.selected.length } items selected</span>
-      </p>
-    </div>);
+  renderActionBox() {
+    return this.props.actionBox(this.state.selected);
   }
 
   render() {
@@ -121,14 +114,10 @@ class Selector extends React.Component {
       return null;
     }
 
-    const selectedCount = (itemList.count > 0 || this.state.forceShow)
-      ? this.renderSelectedCount(this.state.selected)
-      : null;
-
     return (
       <div className="selector">
         <ul>{ itemList }</ul>
-        { selectedCount }
+        { this.props.actionBox && this.renderActionBox() }
       </div>
     );
   }

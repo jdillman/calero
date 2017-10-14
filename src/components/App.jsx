@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, withRouter } from 'react-router-dom';
 import { appStart } from 'modules/UIModule';
 import Selector from 'components/Selector';
 
@@ -24,7 +24,7 @@ function SelectorScreen() {
   return (
     <div>
       <p>Select Ctrl or Shift while clicking on the yellow boxes</p>
-      <Selector activeClass="selected" actionBox={ActionBox}>
+      <Selector selectedClass="selected" actionBox={ActionBox}>
         <div className="box" key="test" />
         <div className="box" key="test2" />
         <div className="box" key="test3" />
@@ -36,7 +36,7 @@ function SelectorScreen() {
 
 class App extends React.Component {
   componentDidMount() {
-    // this.props.appStart();
+    this.props.appStart();
   }
 
   render() {
@@ -65,4 +65,4 @@ function mapStateToProps(state) {
     ready: state.ui.ready,
   };
 }
-export default connect(mapStateToProps, { appStart })(App);
+export default withRouter(connect(mapStateToProps, { appStart })(App));

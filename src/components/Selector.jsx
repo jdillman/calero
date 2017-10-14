@@ -91,11 +91,11 @@ class Selector extends React.Component {
       };
 
       if (this.state.selected.indexOf(key) !== -1) {
-        if (this.props.style) {
-          itemProps.style = this.props.style;
+        if (this.props.selectedStyle) {
+          itemProps.style = this.props.selectedStyle;
         }
-        if (this.props.activeClass) {
-          itemProps.className += ` ${this.props.activeClass}`;
+        if (this.props.selectedClass) {
+          itemProps.className += ` ${this.props.selectedClass}`;
         }
       }
 

@@ -1,7 +1,7 @@
 const Urls = {
-  STRAVA_API: 'https://www.strava.com/api/v3/',
-  GITHUB: 'https://github.com/jdillman/reactor',
-  GITHUB_PACKAGE_JSON: 'https://raw.githubusercontent.com/jdillman/reactor/master/package.json',
+  HOME: 'http://jonathandillman.com',
+  GITHUB: 'https://github.com/jdillman/calero',
+  GITHUB_PACKAGE_JSON: 'https://raw.githubusercontent.com/jdillman/calero/master/package.json',
 };
 
 export default Urls;

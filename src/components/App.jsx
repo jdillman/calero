@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Link, withRouter } from 'react-router-dom';
 import { appStart } from 'modules/UIModule';
+import Urls from 'lib/urls.js';
 import Selector from 'components/Selector';
+import ActionButton from 'components/ActionButton';
 
 import 'css/common/reset.css';
 import 'css/common/colors.css';
@@ -11,6 +13,33 @@ import 'css/App.css';
 
 function HomeScreen() {
   return <div>Playground</div>;
+}
+
+function ActionButtonScreen() {
+  const url = `${Urls.HOME}/resume.json`;
+  const onError = (ref) => {
+    console.log('onError');
+    console.log(ref);
+  };
+
+  const onComplete = (ref) => {
+    console.log('onComplete');
+    console.log(ref);
+  };
+
+  return (
+    <div>
+      <ActionButton
+        url={url}
+        className="action-button"
+        classNameError="error"
+        classNamePending="pending"
+        classNameComplete="complete"
+        onError={onError}
+        onComplete={onComplete}
+      >Click Me</ActionButton>
+    </div>
+  );
 }
 
 function SelectorScreen() {
@@ -23,7 +52,7 @@ function SelectorScreen() {
 
   return (
     <div>
-      <p>Select Ctrl or Shift while clicking on the yellow boxes</p>
+      <p>Ctrl/Command or shift click on the yellow boxes</p>
       <Selector selectedClass="selected" actionBox={ActionBox}>
         <div className="box" key="test" />
         <div className="box" key="test2" />
@@ -48,11 +77,13 @@ class App extends React.Component {
             <Link to="/">Home</Link>
             <ul>
               <li><Link to="/components/selector">Selector</Link></li>
+              <li><Link to="/components/action_button">ActionButton</Link></li>
             </ul>
           </nav>
           <section className="main-content">
             <Route exact path="/" component={HomeScreen} />
             <Route path="/components/selector" component={SelectorScreen} />
+            <Route path="/components/action_button" component={ActionButtonScreen} />
           </section>
         </main>
       </div>
